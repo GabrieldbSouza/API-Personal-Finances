@@ -59,11 +59,6 @@ def post_user():
 
   return  jsonify({'message': 'Usuário criado'})
 
-def converter_date(date_str):
-  value_str = datetime.strptime(date_str, '%Y-%m-%d').date()
-
-  return float(value_str.replace(',', '.'))
-
 if __name__ == '__main__':
   with app.app_context():
     db.create_all()
