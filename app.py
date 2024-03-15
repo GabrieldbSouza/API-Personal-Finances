@@ -31,16 +31,38 @@ class Transaction(db.Model):
 def get_transaction():
   transaction = Transaction.query.all()
   
-  return  jsonify(transaction)
+  return  jsonify([{'user_id': transaction.user_id, 'date': transaction.date, 'value': transaction.value} for transaction in transaction])
 
 @app.route('/transaction/date', methods = ['GET'])
 def get_transaction_date():
-  start_date = request.args.get('starr_date')
+  start_date = request.args.get('start_date')
   end_date = request.args.get('end_date')
-  
   transaction = Transaction.query.filter(Transaction.date.between(start_date, end_date)).all()
   
-  return jsonify(transaction)
+  return jsonify([{'user_id': transaction.user_id, 'date': transaction.date, 'value': transaction.value} for transaction in transaction])
+
+@app.route('/transaction', methods = ['POST'])
+def post_transacttion():
+  data = request.get_json()
+  new_transaction = Transaction(user_id = data['user_id'], date = datetime.strptime(data['date'], '%Y-%m-%d').date(), value = data['value'])
+  db.session.add(new_transaction)
+  db.session.commit()
+
+  return jsonify({'message': 'Transação inserida'})
+
+@app.route('/user', methods = ['POST'])
+def post_user():
+  data = request.get_json()
+  new_user = User(username = data['username'],email = data['email' ],password = data['password'])
+  db.session.add(new_user)
+  db.session.commit()
+
+  return  jsonify({'message': 'Usuário criado'})
+
+def converter_date(date_str):
+  value_str = datetime.strptime(date_str, '%Y-%m-%d').date()
+
+  return float(value_str.replace(',', '.'))
 
 if __name__ == '__main__':
   with app.app_context():
