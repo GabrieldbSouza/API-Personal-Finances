@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, redirect, url_for, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask_cors import CORS
@@ -29,6 +29,19 @@ class Transaction(db.Model):
     return f"Transaction('{self.date}', '{self.value}')"
 
 # Definição das rotas
+  
+@app.route('/')
+def init():
+  return redirect(url_for('login'))
+
+@app.route('/login')
+def login():
+  return render_template('login.html')
+
+@app.route('/register')
+def cadastro():
+  return render_template('register.html')
+
 @app.route('/transaction', methods = ['GET'])
 def get_transaction():
   transaction = Transaction.query.all()
