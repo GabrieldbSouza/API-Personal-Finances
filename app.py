@@ -1,10 +1,10 @@
 from flask import Flask, redirect, url_for, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from flask_cors import CORS
+#from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
+#CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///personalfinances.sqlite' 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False 
 db = SQLAlchemy(app)
@@ -34,12 +34,35 @@ class Transaction(db.Model):
 def init():
   return redirect(url_for('login'))
 
-@app.route('/login')
+@app.route('/login', methods = ['GET','POST'])
 def login():
+  email = request.form.get('email')
+  password = request.form.get('password')
+  user = User.query.filter_by(email=email, password=password).first()
+  if user:
+    return jsonify({'###': 'voce se conectou com sucesso!'})
+  else:
+    return render_template('login.html', error='Credenciais inválidas. Tente novamente.')
+
   return render_template('login.html')
 
-@app.route('/register')
+@app.route('/register', methods = ['GET','POST'])
 def cadastro():
+  if request.method == 'POST':
+    email = request.form.get('email')
+    password = request.form.get('password')
+    confirm_password = request.form.get('confirm-password')
+
+    if not all([email, password, confirm_password]) and password != confirm_password:
+      return jsonify({"ERRO!": 'Por favor, preencha todos os campos corretamente.'})
+    
+    if User.query.filter_by(email=email).first():
+      return jsonify({"ERRO!": 'Este e-mail ja esta em uso. Tente novamente com outro.'})
+    x = 'Seu nofrfrrfme'
+    new_user = User(username=x, email=email, password=password)
+    db.session.add(new_user)
+    db.session.commit()
+
   return render_template('register.html')
 
 @app.route('/transaction', methods = ['GET'])
