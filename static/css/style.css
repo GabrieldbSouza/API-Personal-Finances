@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 400;
+}
+body{
+    color: #454545;
+    height: 100vh;
+    width: 100vw;
+}
+.header{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+.navbar a{
+    border: #bbb solid 1px;
+    font-size: 14px;
+    color: #454545;
+    background: #f3f3f3;
+    padding: 5px 7px;
+    text-decoration: none;
+    margin: 0px 2px;
+    border-radius: 3px;
+}
+.navbar a:hover{
+    color: #fff;
+    background: #662483;
+    border: #662483 solid 1px;
+    transition: .2s;
+}
+.container{
+    display: flex;
+    height: 100vh;
+}
+.login, .register{
+    margin: 10% auto;
+    display: flex;
+    flex-direction: column;
+}
+.login .input, .register .input{
+    font-size: 16px;
+    margin: 5px;
+    display: flex;
+    flex-direction: column;
+}
+.login .input input,.register .input input{
+    min-height: 30px;
+    min-width: 300px;
+}
+.login .input .submit,.register .input .submit {
+    color: #fff;
+    background: #662483;
+    border: #662483;
+}
